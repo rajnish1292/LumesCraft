@@ -59,3 +59,10 @@ class frame_colorAdmin(ExportActionMixin, admin.ModelAdmin):
 
 
 admin.site.register(frame_color, frame_colorAdmin)
+
+
+class quotationAdmin(ExportActionMixin, admin.ModelAdmin):
+    list_display = ('quotation_id', 'user_id', 'details', 'invoice', 'create_at', 'update_at' )
+
+
+admin.site.register(quotation, quotationAdmin)

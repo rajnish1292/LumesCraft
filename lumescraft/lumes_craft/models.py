@@ -1,4 +1,5 @@
 from django.db import models
+import jsonfield
 
 # Create your models here.
 
@@ -75,3 +76,15 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return str(self.user_name)
+
+
+class quotation(models.Model):
+    quotation_id = models.AutoField(primary_key=True)
+    user_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    details = jsonfield.JSONField()
+    invoice = models.FileField(upload_to="media/invoice", blank=True)
+    create_at = models.DateTimeField(auto_now_add=True, auto_now=False)
+    update_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.quotation_id)
