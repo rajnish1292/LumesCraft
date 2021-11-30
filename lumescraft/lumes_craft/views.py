@@ -146,7 +146,7 @@ class quotationDetail(APIView):
 
     def get(self, request, user_id, format=None):
         Accelerometer_obj = self.get_object(user_id)
-        serializer = quotation_Serializer(Accelerometer_obj, many=True)
+        serializer = quotation_Serializer(Accelerometer_obj, many=True, context={"request": request})
         quotation_Serializer_insta = serializer.data
 
         return Response(quotation_Serializer_insta)
