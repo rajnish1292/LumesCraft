@@ -7,6 +7,7 @@ import jsonfield
 class category(models.Model):
     category_id = models.AutoField(primary_key=True)
     category_name = models.CharField(max_length=500, blank=True)
+    category_image = models.ImageField(upload_to="media/category")
     create_at = models.DateTimeField(auto_now_add=True, auto_now=False)
     update_at = models.DateTimeField(auto_now=True)
 
@@ -23,7 +24,9 @@ class product(models.Model):
     description = models.TextField(max_length=1000, blank=True)
     warrenty_terms = models.TextField(max_length=1000, blank=True)
     return_cancellation = models.CharField(max_length=500, blank=True)
-    dimensions = models.CharField(max_length=500, blank=True)
+    length = models.CharField(max_length=500, blank=True)
+    width = models.CharField(max_length=500, blank=True)
+    height = models.CharField(max_length=500, blank=True)
     create_at = models.DateTimeField(auto_now_add=True, auto_now=False)
     update_at = models.DateTimeField(auto_now=True)
 

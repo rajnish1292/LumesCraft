@@ -47,7 +47,7 @@ class products_Serializer(serializers.ModelSerializer):
         model = product
         fields = (
             'category_id', 'product_id', 'product_name', 'SKU', 'product_price', 'description', 'warrenty_terms',
-            'return_cancellation', 'dimensions', 'create_at', 'update_at')
+            'return_cancellation', 'length', 'width', 'height', 'create_at', 'update_at')
 
 
 class Wicker_Serializer(serializers.ModelSerializer):
