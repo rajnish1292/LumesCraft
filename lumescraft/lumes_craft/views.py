@@ -3,7 +3,8 @@ from .models import *
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from .serializers import category_Serializer, products_Serializer, Product_images_Serializer, Wicker_Serializer, \
-    Fabric_Serializer, Frame_Serializer, UserProfile_Serializer, quotation_Serializer, UserSerializer, RegisterSerializer
+    Fabric_Serializer, Frame_Serializer, UserProfile_Serializer, quotation_Serializer, UserSerializer, \
+    RegisterSerializer
 from rest_framework.response import Response
 from django.http import Http404
 from knox.models import AuthToken
@@ -11,6 +12,7 @@ from rest_framework import generics, permissions
 from django.contrib.auth import login
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import LoginView as KnoxLoginView
+
 
 # Create your views here.
 
@@ -24,8 +26,8 @@ class RegisterAPI(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         return Response({
-        "user": UserSerializer(user, context=self.get_serializer_context()).data,
-        "token": AuthToken.objects.create(user)[1]
+            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+            "token": AuthToken.objects.create(user)[1]
         })
 
 
@@ -176,3 +178,69 @@ class user_profile_add_ViewSet(viewsets.ModelViewSet):
             return Response(serializer.data,
                             status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+############################################## new changes ###############################
+
+
+class product_baised_on_category(APIView):
+    serializer_class = products_Serializer, Product_images_Serializer
+
+    def get_object(self, category_id):
+        # Returns an object instance that should
+        # be used for detail views.
+        try:
+            return product.objects.filter(category_id=category_id)
+        except product.DoesNotExist:
+            raise Http404
+
+    def get(self, request, category_id, format=None):
+        product_obj = self.get_object(category_id)
+
+        Local_url = "http://127.0.0.1:8000/media/"
+        Server_url = "http://164.52.214.242:8009/media/"
+        serializer = products_Serializer(product_obj, many=True, context={"request": request})
+        product_Serializer_insta = serializer.data
+
+        product_list = []
+        for i in product_Serializer_insta:
+            category_id = i['category_id']
+            product_id = i['product_id']
+            product_name = i['product_name']
+            SKU = i['SKU']
+            product_price = i['product_price']
+            description = i['description']
+            warrenty_terms = i['warrenty_terms']
+            return_cancellation = i['return_cancellation']
+            length = i['length']
+            width = i['width']
+            height = i['height']
+            create_at = i['create_at']
+            update_at = i['update_at']
+
+            product_images = product_image.objects.filter(product_id=product_id).values_list('product_image', flat=True)
+            # print("product_image ::", product_images)
+            prod_images = []
+            for PI in product_images:
+                prod_images.append(Server_url + PI)
+
+            product_dict = {
+                'category_id': category_id,
+                'product_id': product_id,
+                'product_name': product_name,
+                'SKU': SKU,
+                'product_price': product_price,
+                'description': description,
+                'warrenty_terms': warrenty_terms,
+                'return_cancellation': return_cancellation,
+                'length': length,
+                'width': width,
+                'height': height,
+                'create_at': create_at,
+                'update_at': update_at,
+                'product_images': prod_images
+
+            }
+            # print(product_dict)
+            product_list.append(product_dict)
+        return Response(product_list)
