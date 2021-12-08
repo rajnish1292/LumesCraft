@@ -7,7 +7,7 @@ from import_export.admin import ExportActionMixin
 
 
 class user_profileAdmin(ExportActionMixin, admin.ModelAdmin):
-    list_display = ('user_id', 'user_name', 'email', 'phone', 'alternate_phone', 'address')
+    list_display = ('user_id', 'user_name', 'email', 'phone', 'alternate_phone', 'address', 'gstin')
 
 
 admin.site.register(UserProfile, user_profileAdmin)
@@ -68,11 +68,11 @@ class quotationAdmin(ExportActionMixin, admin.ModelAdmin):
 admin.site.register(quotation, quotationAdmin)
 
 
-class invoiceAdmin(ExportActionMixin, admin.ModelAdmin):
-    list_display = ('invoice_id','quotation_id', 'invoice_doc', 'create_at', 'update_at' )
+class invoice_saveAdmin(ExportActionMixin, admin.ModelAdmin):
+    list_display = ('invoice_id','user_id', 'invoice_link', 'create_at' )
 
 
-admin.site.register(create_invoice_file, invoiceAdmin)
+admin.site.register(invoice_save, invoice_saveAdmin)
 
 
 class cushionAdmin(ExportActionMixin, admin.ModelAdmin):

@@ -76,6 +76,7 @@ class UserProfile(models.Model):
     phone = models.CharField(max_length=500, blank=True)
     alternate_phone = models.CharField(max_length=500, blank=True)
     address = models.TextField(max_length=500, blank=True)
+    gstin = models.CharField(max_length=500, blank=True)
 
     def __str__(self):
         return str(self.user_name)
@@ -92,16 +93,6 @@ class quotation(models.Model):
     def __str__(self):
         return str(self.quotation_id)
 
-class create_invoice_file(models.Model):
-    invoice_id = models.AutoField(primary_key=True)
-    quotation_id = models.ForeignKey(quotation, on_delete=models.CASCADE)
-    invoice_doc = models.FileField(upload_to="media/invoice", blank=True)
-    create_at = models.DateTimeField(auto_now_add=True, auto_now=False)
-    update_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return str(self.invoice_id)
-
 
 class cushion(models.Model):
     cushion_id = models.AutoField(primary_key=True)
@@ -110,3 +101,13 @@ class cushion(models.Model):
 
     def __str__(self):
         return str(self.cushion_id)
+
+
+class invoice_save(models.Model):
+    invoice_id = models.AutoField(primary_key=True)
+    user_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    invoice_link = models.CharField(max_length=1000, blank=True)
+    create_at = models.DateTimeField(auto_now_add=True, auto_now=False)
+
+    def __str__(self):
+        return str(self.invoice_id)

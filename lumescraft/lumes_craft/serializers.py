@@ -80,9 +80,9 @@ class quotation_Serializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class create_invoice_file_Serializer(serializers.ModelSerializer):
+class invoice_save_file_Serializer(serializers.ModelSerializer):
     class Meta:
-        model = create_invoice_file
+        model = invoice_save
         fields = '__all__'
 
 
@@ -90,3 +90,9 @@ class cushion_Serializer(serializers.ModelSerializer):
     class Meta:
         model = cushion
         fields = '__all__'
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['user_id', 'user_name', 'email', 'alternate_phone', 'address', 'gstin']
