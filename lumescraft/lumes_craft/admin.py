@@ -66,3 +66,17 @@ class quotationAdmin(ExportActionMixin, admin.ModelAdmin):
 
 
 admin.site.register(quotation, quotationAdmin)
+
+
+class invoiceAdmin(ExportActionMixin, admin.ModelAdmin):
+    list_display = ('invoice_id','quotation_id', 'invoice_doc', 'create_at', 'update_at' )
+
+
+admin.site.register(create_invoice_file, invoiceAdmin)
+
+
+class cushionAdmin(ExportActionMixin, admin.ModelAdmin):
+    list_display = ('cushion_id', 'cushion_size', 'cushion_price')
+
+
+admin.site.register(cushion, cushionAdmin)

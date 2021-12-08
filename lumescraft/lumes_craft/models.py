@@ -91,3 +91,22 @@ class quotation(models.Model):
 
     def __str__(self):
         return str(self.quotation_id)
+
+class create_invoice_file(models.Model):
+    invoice_id = models.AutoField(primary_key=True)
+    quotation_id = models.ForeignKey(quotation, on_delete=models.CASCADE)
+    invoice_doc = models.FileField(upload_to="media/invoice", blank=True)
+    create_at = models.DateTimeField(auto_now_add=True, auto_now=False)
+    update_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.invoice_id)
+
+
+class cushion(models.Model):
+    cushion_id = models.AutoField(primary_key=True)
+    cushion_size = models.CharField(max_length=500, blank=True)
+    cushion_price = models.CharField(max_length=500, blank=True)
+
+    def __str__(self):
+        return str(self.cushion_id)

@@ -78,3 +78,15 @@ class quotation_Serializer(serializers.ModelSerializer):
     class Meta:
         model = quotation
         fields = '__all__'
+
+
+class create_invoice_file_Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = create_invoice_file
+        fields = '__all__'
+
+
+class cushion_Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = cushion
+        fields = '__all__'
