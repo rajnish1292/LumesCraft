@@ -2,8 +2,8 @@ from django.urls import include, path
 from rest_framework import routers
 from .views import category_ViewSet, Product_List_items, Category_List_items, Wicker_List_items, Fabric_List_items, \
     Frame_List_items, User_Profile_List_items, Product_image_List_items, quotationDetail, quotation_ViewSet, \
-    user_profile_add_ViewSet, RegisterAPI, product_baised_on_category, Cushion_List_items, \
-    Check_user_exist, invoice_save_file_link_view, get_invoice_link, UpdateUserProfile
+    user_profile_add_ViewSet, RegisterAPI, product_baised_on_category, Cushion_List_items, Invoice_pdf_List_items, \
+    Check_user_exist, invoice_save_file_link_view, get_invoice_link, UpdateUserProfile, pdf_invoice_link
 from knox import views as knox_views
 from .views import LoginAPI
 
@@ -30,6 +30,8 @@ urlpatterns = [
     path('save_invoice_file_link/', invoice_save_file_link_view.as_view()),
     path('check_user_exist/<str:phone>/', Check_user_exist.as_view()),
     path('get_invoice_link/<str:user_id>/', get_invoice_link.as_view()),
-    path('UpdateUserProfile/', UpdateUserProfile.as_view())
+    path('UpdateUserProfile/', UpdateUserProfile.as_view()),
+    path('pdf_invoice_link/<str:user_id>/', pdf_invoice_link.as_view()),
+    path('Invoice_pdf_List_items/', Invoice_pdf_List_items.as_view({'get': 'list'}))
 
 ]

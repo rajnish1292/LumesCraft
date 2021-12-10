@@ -4,7 +4,7 @@ from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from .serializers import category_Serializer, products_Serializer, Product_images_Serializer, Wicker_Serializer, \
     Fabric_Serializer, Frame_Serializer, UserProfile_Serializer, quotation_Serializer, UserSerializer, \
-    RegisterSerializer, cushion_Serializer, invoice_save_file_Serializer, UserProfileSerializer
+    RegisterSerializer, cushion_Serializer, invoice_save_file_Serializer, UserProfileSerializer, Userdetails_with_invoice_linkSerializer
 from rest_framework.response import Response
 from django.http import Http404
 from knox.models import AuthToken
@@ -380,3 +380,89 @@ class UpdateUserProfile(generics.UpdateAPIView):
         return Response(content)
 
 
+
+class pdf_invoice_link(APIView):
+
+    def get_object(self, user_id):
+        # Returns an object instance that should
+        # be used for detail views.
+        try:
+            return UserProfile.objects.filter(user_id=user_id)
+        except UserProfile.DoesNotExist:
+            raise Http404
+
+    def get(self, request, user_id, format=None):
+        user_obj = self.get_object(user_id)
+        serializer = Userdetails_with_invoice_linkSerializer(user_obj, many=True)
+        user_pdf_Serializer_insta = serializer.data
+
+        final_user_pdf_list = []
+        for i in user_pdf_Serializer_insta:
+            user_id = i['user_id']
+            user_name = i['user_name']
+            email = i['email']
+            phone = i['phone']
+            alternate_phone = i['alternate_phone']
+            address = i['address']
+            gstin = i['gstin']
+
+
+            pdf_url = invoice_save.objects.filter(user_id=user_id).values_list('invoice_id','user_id','invoice_link','create_at', flat=False).order_by('-invoice_id')[:1]
+            # print("pdf_url ::", pdf_url)
+            PDF_URL = []
+            for PU in pdf_url:
+                PDF_URL.append(PU)
+            pdf_dict = {}
+            for url_invoice in PDF_URL:
+                pdf_dict = {
+                    'invoice_id': url_invoice[0],
+                    'user_id': url_invoice[1],
+                    'invoice_link': url_invoice[2],
+                    'create_at': url_invoice[3]
+                }
+
+            user_invoice_dict = {
+                'user_id': user_id,
+                'user_name': user_name,
+                'email': email,
+                'phone': phone,
+                'alternate_phone': alternate_phone,
+                'address': address,
+                'gstin': gstin,
+                'PDF_URL': pdf_dict,
+
+            }
+            # print(user_invoice_dict)
+            final_user_pdf_list.append(user_invoice_dict)
+        return Response(final_user_pdf_list)
+
+
+class Invoice_pdf_List_items(viewsets.ModelViewSet):
+    queryset = invoice_save.objects.all()
+    serializer_class = invoice_save_file_Serializer
+
+    def list(self, request, *args, **kwargs):
+        invoice_instance = invoice_save.objects.all()
+        serializer = invoice_save_file_Serializer(invoice_instance, many=True)
+        invoice_insta = serializer.data
+        all_data_list = []
+        for i in invoice_insta:
+            user_id = i['user_id']
+            invoice_link = i['invoice_link']
+            invoice_id = i['invoice_id']
+            user_profile_data = UserProfile.objects.filter(user_id=user_id).values_list('user_name', 'phone', 'email', 'alternate_phone', 'address', 'gstin', flat=False)
+
+            for k in user_profile_data:
+                all_dict = {
+                    'user_id': user_id,
+                    'invoice_id': invoice_id,
+                    'user_name': k[0],
+                    'phone': k[1],
+                    'email': k[2],
+                    'alternate_phone': k[3],
+                    'address': k[4],
+                    'gstin': k[5],
+                    'pdf_link': invoice_link
+                }
+                all_data_list.append(all_dict)
+        return Response(all_data_list)

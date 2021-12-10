@@ -96,3 +96,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['user_id', 'user_name', 'email', 'alternate_phone', 'address', 'gstin']
+
+
+class Userdetails_with_invoice_linkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['user_id', 'user_name', 'email', 'phone', 'alternate_phone', 'address', 'gstin']
+
