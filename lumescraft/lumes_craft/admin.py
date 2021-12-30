@@ -27,7 +27,7 @@ admin.site.register(category, categoryAdmin)
 class productAdmin(ExportActionMixin, admin.ModelAdmin):
     list_display = (
     'category_id', 'product_id', 'product_name', 'SKU', 'product_price', 'description', 'warrenty_terms',
-    'return_cancellation', 'length', 'width', 'height', 'create_at', 'update_at')
+    'return_cancellation', 'length', 'width', 'height', 'isTable', 'topMaterial', 'topPrice', 'create_at', 'update_at')
 
 
 admin.site.register(product, productAdmin)

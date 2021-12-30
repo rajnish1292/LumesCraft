@@ -263,6 +263,9 @@ class product_baised_on_category(APIView):
             length = i['length']
             width = i['width']
             height = i['height']
+            isTable = i['isTable']
+            topMaterial = i['topMaterial']
+            topPrice = i['topPrice']
             create_at = i['create_at']
             update_at = i['update_at']
 
@@ -286,6 +289,9 @@ class product_baised_on_category(APIView):
                 'height': height,
                 'create_at': create_at,
                 'update_at': update_at,
+                'isTable': isTable,
+                'topMaterial': topMaterial,
+                'topPrice': topPrice,
                 'product_images': prod_images
 
             }

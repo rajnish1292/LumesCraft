@@ -27,6 +27,9 @@ class product(models.Model):
     length = models.CharField(max_length=500, blank=True)
     width = models.CharField(max_length=500, blank=True)
     height = models.CharField(max_length=500, blank=True)
+    isTable = models.BooleanField(blank=True)
+    topMaterial = models.CharField(max_length=500, blank=True)
+    topPrice = models.CharField(max_length=500, blank=True)
     create_at = models.DateTimeField(auto_now_add=True, auto_now=False)
     update_at = models.DateTimeField(auto_now=True)
 
